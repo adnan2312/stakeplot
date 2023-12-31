@@ -18,8 +18,8 @@ let transporter = nodemailer.createTransport(nodeConfig)
 let mailgenerattor = new Mailgen({
     theme:"default",
     product:{
-        name:"P-Z",
-        link:"https://mailgen.js/"
+        name:"Stakeplot",
+        link:"https://stakeplot.com"
     }
 })
 
@@ -30,7 +30,7 @@ const registermail = async (req,res) => {
         body : {
             name: username,
             intro:text || "You are welcome",
-            outro : "Looking forward to do more"
+            outro : "Thanks for signing up for the stakeplot.Looking forward for the journey"
         }
     }
      let mail = mailgenerattor.generate(email)
@@ -56,7 +56,7 @@ const billsemail = async(username,useremail,billdate,billname) => {
     let email = {
         body : {
             name: username,
-            intro:billname + " is due to pay",
+            intro:billname + " is due to pay on",
             outro : billdate || "Looking forward to do more"
         }
     }
