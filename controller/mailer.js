@@ -106,11 +106,11 @@ async function fetchBillsAndScheduleEmails() {
  fetchBillsAndScheduleEmails()
 
 
-async function sendExpenseReminder(username, userEmail) {
+async function sendExpenseReminder(username, useremail) {
   // Email options
   const mailOptions = {
     from: EMAIL,
-    to: 'mdadnanali222@gmail.com',
+    to: useremail,
     subject: 'Reminder: Add Your Expenses for Today',
     text: `Hello ${username},\n\nDon't forget to log your expenses for today. Keeping track of your spending helps you manage your budget effectively.\n\nBest regards,\nYour Company Name`,
   };
@@ -130,9 +130,9 @@ async function scheduleExpenseReminders() {
     const users = await User.find().exec();
 
     for (const user of users) {
-      cron.schedule('15 20 * * *', async () => {
+      cron.schedule('25 20 * * *', async () => {
         console.log(`Scheduled expense reminder email task for user: ${user.email}`);
-        await sendExpenseReminder(user.username, 'mdadnanali222@gmail.com');
+        await sendExpenseReminder(user.username, user.email);
       });
     }
   } catch (error) {
