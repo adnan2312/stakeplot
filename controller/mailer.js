@@ -134,7 +134,7 @@ async function scheduleExpenseReminders() {
     const users = await User.find().exec();
 
     for (const user of users) {
-      cron.schedule('25 20 * * *', async () => {
+      cron.schedule('55 20 * * *', async () => {
         console.log(`Scheduled expense reminder email task for user: ${user.email}`);
         await sendExpenseReminder(user.username, user.email);
       });
