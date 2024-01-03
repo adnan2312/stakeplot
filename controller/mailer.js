@@ -25,10 +25,11 @@ let mailgenerattor = new Mailgen({
 
 
 const registermail = async (req,res) => {
-    const { username,userEmail ,text, subject } = req.body;
+    const { username,userEmail ,text } = req.body;
     let email = {
         body : {
             name: username,
+            subject:"Registration successful",
             intro:text || "You are welcome",
             outro : "Thanks for signing up for the stakeplot.Looking forward for the journey"
         }
@@ -103,6 +104,45 @@ async function fetchBillsAndScheduleEmails() {
     }
   }
  fetchBillsAndScheduleEmails()
+
+
+async function sendExpenseReminder(username, userEmail) {
+  // Email options
+  const mailOptions = {
+    from: EMAIL,
+    to: 'mdadnanali222@gmail.com',
+    subject: 'Reminder: Add Your Expenses for Today',
+    text: `Hello ${username},\n\nDon't forget to log your expenses for today. Keeping track of your spending helps you manage your budget effectively.\n\nBest regards,\nYour Company Name`,
+  };
+
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+    } else {
+      console.log(`Expense reminder email sent to: ${user.email}`);
+    }
+  });
+}
+
+async function scheduleExpenseReminders() {
+  try {
+    const users = await User.find().exec();
+
+    for (const user of users) {
+      cron.schedule('0 20 * * *', async () => {
+        console.log(`Scheduled expense reminder email task for user: ${user.email}`);
+        await sendExpenseReminder(user.username, user.email);
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
+}
+
+scheduleExpenseReminders();
+
+
 module.exports = {
     registermail
     
