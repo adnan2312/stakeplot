@@ -108,21 +108,25 @@ async function fetchBillsAndScheduleEmails() {
 
 async function sendExpenseReminder(username, useremail) {
   // Email options
-  const mailOptions = {
-    from: EMAIL,
-    to: useremail,
-    subject: 'Reminder: Add Your Expenses for Today',
-    text: `Hello ${username},\n\nDon't forget to log your expenses for today. Keeping track of your spending helps you manage your budget effectively.\n\nBest regards,\nYour Company Name`,
-  };
-
-  // Send email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email:', error);
-    } else {
-      console.log(`Expense reminder email sent to: ${user.email}`);
+  let email = {
+    body : {
+        name: username,
     }
-  });
+}
+ let mail = mailgenerattor.generate(email)
+ let message = {
+    from : EMAIL,
+    to : useremail,
+    subject: 'Reminder: Add Your Expenses for Today',
+    text: `Hello ${username},\n\nDon't forget to log your expenses for today. Keeping track of your spending helps you manage your budget effectively.\n\nBest regards,\nStakeplot`,
+    html:mail
+ }
+     try {
+await transporter.sendMail(message);
+console.log(`Email sent for ${billname} to ${message.to}`);
+} catch (error) {
+console.error(`Error sending email for ${billname}:`, error);
+}
 }
 
 async function scheduleExpenseReminders() {
