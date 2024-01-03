@@ -123,9 +123,9 @@ async function sendExpenseReminder(username, useremail) {
  }
      try {
 await transporter.sendMail(message);
-console.log(`Email sent for ${billname} to ${message.to}`);
+console.log(`Email sent for ${username} to ${message.to}`);
 } catch (error) {
-console.error(`Error sending email for ${billname}:`, error);
+console.error(`Error sending email for ${username}:`, error);
 }
 }
 
@@ -134,7 +134,7 @@ async function scheduleExpenseReminders() {
     const users = await User.find().exec();
 
     for (const user of users) {
-      cron.schedule('55 20 * * *', async () => {
+      cron.schedule('30 21 * * *', async () => {
         console.log(`Scheduled expense reminder email task for user: ${user.email}`);
         await sendExpenseReminder(user.username, user.email);
       });
